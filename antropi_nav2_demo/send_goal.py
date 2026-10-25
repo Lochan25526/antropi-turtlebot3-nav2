@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Send one or more NavigateToPose goals and report what happened.
 
-    ros2 run antropi_nav2_demo send_goal                # default demo route
-    ros2 run antropi_nav2_demo send_goal -- -4.3 1.3 3.14   # x y yaw [x y yaw ...]
+    ros2 run antropi_nav2_demo send_goal                        # demo route of the lab scene
+    ros2 run antropi_nav2_demo send_goal --scene tb3_house      # demo route of another scene
+    ros2 run antropi_nav2_demo send_goal -- -4.3 1.3 3.14       # explicit x y yaw [x y yaw ...]
 
 Waits for Nav2 to be active, sends each pose in turn, prints distance
 remaining while driving and the final result. Exit code 0 only if every goal
@@ -17,10 +18,7 @@ from geometry_msgs.msg import PoseStamped
 from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
 
 from antropi_nav2_demo.nav_wait import wait_for_nav2
-
-# Demo route in the lab map: south down the east strip past the moving obstacle
-# and the unmapped box, west under the tables to the pocket, then back to the start.
-DEFAULT_ROUTE = [(-2.7, -0.3, math.pi), (-4.3, 1.3, math.pi), (-1.9, 2.75, -math.pi / 2)]
+from antropi_nav2_demo.scenes import load_scene
 
 
 def pose(nav, x, y, yaw):
@@ -34,9 +32,13 @@ def pose(nav, x, y, yaw):
 
 
 def parse(argv):
+    scene = 'lab'
+    if '--scene' in argv:
+        i = argv.index('--scene')
+        scene, argv = argv[i + 1], argv[:i] + argv[i + 2:]
     vals = [float(a) for a in argv if a != '--']
     if not vals:
-        return DEFAULT_ROUTE
+        return load_scene(scene)['route']
     if len(vals) % 3:
         sys.exit('usage: send_goal [x y yaw]...')
     return [tuple(vals[i:i + 3]) for i in range(0, len(vals), 3)]

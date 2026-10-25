@@ -1,0 +1,74 @@
+{
+  "name": "tb3_house_gui_recorded",
+  "route": [
+    [
+      1.3,
+      -2.5,
+      -1.5708
+    ],
+    [
+      -1.5,
+      3.5,
+      3.14159
+    ],
+    [
+      -3.0,
+      1.0,
+      0.0
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        1.3,
+        -2.5,
+        -1.5708
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 41.8,
+      "recoveries": 0,
+      "replans": 41
+    },
+    {
+      "goal": [
+        -1.5,
+        3.5,
+        3.14159
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 41.8,
+      "recoveries": 0,
+      "replans": 40
+    },
+    {
+      "goal": [
+        -3.0,
+        1.0,
+        0.0
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 19.9,
+      "recoveries": 0,
+      "replans": 18
+    }
+  ],
+  "robot_path_length_m": 17.7707521394283,
+  "total_replans": 99,
+  "samples": 1075,
+  "moving_obstacle": {
+    "min_centre_distance_m": 0.554,
+    "clearance_m": 0.299,
+    "obstacle_travel_m": 13.98,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      0.9,
+      -1.3
+    ],
+    "min_centre_distance_m": 0.493,
+    "clearance_m": 0.238,
+    "collision": false
+  },
+  "pass": true
+}

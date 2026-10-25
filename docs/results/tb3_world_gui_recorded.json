@@ -1,0 +1,74 @@
+{
+  "name": "tb3_world_gui_recorded",
+  "route": [
+    [
+      0.0,
+      -1.8,
+      0.0
+    ],
+    [
+      2.0,
+      0.5,
+      1.5708
+    ],
+    [
+      -0.5,
+      1.8,
+      3.14159
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        0.0,
+        -1.8,
+        0.0
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 18.9,
+      "recoveries": 0,
+      "replans": 18
+    },
+    {
+      "goal": [
+        2.0,
+        0.5,
+        1.5708
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 20.7,
+      "recoveries": 0,
+      "replans": 17
+    },
+    {
+      "goal": [
+        -0.5,
+        1.8,
+        3.14159
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 14.4,
+      "recoveries": 0,
+      "replans": 14
+    }
+  ],
+  "robot_path_length_m": 8.870181822059285,
+  "total_replans": 49,
+  "samples": 574,
+  "moving_obstacle": {
+    "min_centre_distance_m": 0.319,
+    "clearance_m": 0.064,
+    "obstacle_travel_m": 6.67,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      2.2,
+      -0.6
+    ],
+    "min_centre_distance_m": 0.757,
+    "clearance_m": 0.502,
+    "collision": false
+  },
+  "pass": true
+}

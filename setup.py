@@ -5,6 +5,15 @@ from setuptools import setup
 
 package_name = 'antropi_nav2_demo'
 
+
+def tree(src_root):
+    """All files under src_root as (install_dir, [files]) pairs, keeping the directory layout."""
+    out = []
+    for d, _, files in os.walk(src_root):
+        if files:
+            out.append((os.path.join('share', package_name, d), [os.path.join(d, f) for f in files]))
+    return out
+
 setup(
     name=package_name,
     version='0.1.0',
@@ -14,10 +23,10 @@ setup(
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
         (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
+        (os.path.join('share', package_name, 'config', 'scenes'), glob('config/scenes/*.yaml')),
         (os.path.join('share', package_name, 'maps'), glob('maps/*')),
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*.world')),
-        (os.path.join('share', package_name, 'models', 'moving_obstacle'), glob('models/moving_obstacle/*')),
-        (os.path.join('share', package_name, 'models', 'static_box'), glob('models/static_box/*')),
+        *tree('models'),
         (os.path.join('share', package_name, 'rviz'), glob('rviz/*.rviz')),
     ],
     install_requires=['setuptools'],

@@ -1,0 +1,7 @@
+# Third-party packages this demo's scenes use. Import into the workspace with:
+#   vcs import src < src/antropi_nav2_demo/deps.repos
+repositories:
+  aws_robomaker_small_warehouse_world:
+    type: git
+    url: https://github.com/aws-robotics/aws-robomaker-small-warehouse-world.git
+    version: ros2

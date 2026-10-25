@@ -1,0 +1,12 @@
+# Scene: ROBOTIS turtlebot3_house. Map from scripts/world_to_map.py.
+name: tb3_house
+world: tb3_house.world
+map: tb3_house.yaml
+spawn: {x: -3.0, y: 1.0, yaw: 0.0}
+route:
+  - [1.3, -2.5, -1.5708]     # through the 0.8 m door at (1.2, 0) into the south hall
+  - [-1.5, 3.5, 3.14159]     # back through the door, up into the north-west room
+  - [-3.0, 1.0, 0.0]
+patrol: [-1.2, 0.55, -1.2, 1.7]     # crosses the lane that leads to the door
+static_box: {x: 0.9, y: -1.3}       # south-west of the door, off the door-to-goal line so the plan does not flip sides
+rviz: {x: -1.0, y: 1.0, scale: 70}

@@ -1,0 +1,74 @@
+{
+  "name": "tb3_house_headless",
+  "route": [
+    [
+      1.3,
+      -2.5,
+      -1.5708
+    ],
+    [
+      -1.5,
+      3.5,
+      3.14159
+    ],
+    [
+      -3.0,
+      1.0,
+      0.0
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        1.3,
+        -2.5,
+        -1.5708
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 32.5,
+      "recoveries": 0,
+      "replans": 32
+    },
+    {
+      "goal": [
+        -1.5,
+        3.5,
+        3.14159
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 40.9,
+      "recoveries": 0,
+      "replans": 39
+    },
+    {
+      "goal": [
+        -3.0,
+        1.0,
+        0.0
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 19.8,
+      "recoveries": 0,
+      "replans": 18
+    }
+  ],
+  "robot_path_length_m": 17.317620436523534,
+  "total_replans": 89,
+  "samples": 979,
+  "moving_obstacle": {
+    "min_centre_distance_m": 0.439,
+    "clearance_m": 0.184,
+    "obstacle_travel_m": 12.8,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      0.9,
+      -1.3
+    ],
+    "min_centre_distance_m": 0.486,
+    "clearance_m": 0.231,
+    "collision": false
+  },
+  "pass": true
+}

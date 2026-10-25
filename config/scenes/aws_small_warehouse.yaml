@@ -1,0 +1,12 @@
+# Scene: AWS RoboMaker small warehouse (no-roof variant). Map from scripts/world_to_map.py.
+name: aws_small_warehouse
+world: aws_small_warehouse.world
+map: aws_small_warehouse.yaml
+spawn: {x: 3.8, y: -5.0, yaw: 1.5708}
+route:
+  - [3.8, 2.2, 1.5708]       # up the middle shelf aisle (x 2.9..4.75 between the shelf legs)
+  - [0.0, 0.0, 3.14159]      # out onto the open floor
+  - [-1.0, -4.0, -1.5708]
+patrol: [3.1, -1.5, 4.55, -1.5]     # across the aisle
+static_box: {x: 4.2, y: -3.0}       # east side of the aisle, leaves a 1.1 m gap
+rviz: {x: 2.0, y: -1.5, scale: 55}

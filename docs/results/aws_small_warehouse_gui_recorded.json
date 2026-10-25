@@ -1,0 +1,74 @@
+{
+  "name": "aws_small_warehouse_gui_recorded",
+  "route": [
+    [
+      3.8,
+      2.2,
+      1.5708
+    ],
+    [
+      0.0,
+      0.0,
+      3.14159
+    ],
+    [
+      -1.0,
+      -4.0,
+      -1.5708
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        3.8,
+        2.2,
+        1.5708
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 46.9,
+      "recoveries": 1,
+      "replans": 45
+    },
+    {
+      "goal": [
+        0.0,
+        0.0,
+        3.14159
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 26.0,
+      "recoveries": 0,
+      "replans": 24
+    },
+    {
+      "goal": [
+        -1.0,
+        -4.0,
+        -1.5708
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 23.5,
+      "recoveries": 0,
+      "replans": 22
+    }
+  ],
+  "robot_path_length_m": 16.072546344895937,
+  "total_replans": 91,
+  "samples": 1023,
+  "moving_obstacle": {
+    "min_centre_distance_m": 0.407,
+    "clearance_m": 0.152,
+    "obstacle_travel_m": 13.63,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      4.2,
+      -3.0
+    ],
+    "min_centre_distance_m": 0.518,
+    "clearance_m": 0.263,
+    "collision": false
+  },
+  "pass": true
+}

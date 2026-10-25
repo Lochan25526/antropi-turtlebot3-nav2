@@ -1,0 +1,74 @@
+{
+  "name": "tb3_world_headless",
+  "route": [
+    [
+      0.0,
+      -1.8,
+      0.0
+    ],
+    [
+      2.0,
+      0.5,
+      1.5708
+    ],
+    [
+      -0.5,
+      1.8,
+      3.14159
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        0.0,
+        -1.8,
+        0.0
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 12.9,
+      "recoveries": 0,
+      "replans": 13
+    },
+    {
+      "goal": [
+        2.0,
+        0.5,
+        1.5708
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 19.3,
+      "recoveries": 0,
+      "replans": 18
+    },
+    {
+      "goal": [
+        -0.5,
+        1.8,
+        3.14159
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 18.0,
+      "recoveries": 0,
+      "replans": 17
+    }
+  ],
+  "robot_path_length_m": 9.031019039408806,
+  "total_replans": 48,
+  "samples": 538,
+  "moving_obstacle": {
+    "min_centre_distance_m": 0.352,
+    "clearance_m": 0.097,
+    "obstacle_travel_m": 6.32,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      2.2,
+      -0.6
+    ],
+    "min_centre_distance_m": 0.687,
+    "clearance_m": 0.432,
+    "collision": false
+  },
+  "pass": true
+}

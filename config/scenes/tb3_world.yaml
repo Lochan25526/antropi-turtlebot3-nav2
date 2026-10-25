@@ -1,0 +1,14 @@
+# Scene: ROBOTIS turtlebot3_world (hexagon with nine pillars). Map from scripts/world_to_map.py.
+# The route follows the ring around the pillar field; the 0.8 m gaps between pillars are
+# passable but marginal for DWB, so the demo does not depend on them.
+name: tb3_world
+world: tb3_world.world
+map: tb3_world.yaml
+spawn: {x: -2.0, y: -0.5, yaw: 0.0}
+route:
+  - [0.0, -1.8, 0.0]          # south ring, past the moving obstacle
+  - [2.0, 0.5, 1.5708]        # east ring, around the unmapped box
+  - [-0.5, 1.8, 3.14159]      # north ring
+patrol: [0.5, -1.45, 0.5, -2.15]    # crosses the south ring
+static_box: {x: 2.2, y: -0.6}       # east ring, leaves only the west side open
+rviz: {x: 0.0, y: 0.0, scale: 95}

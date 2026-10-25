@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <!-- A bare 2D LiDAR at TurtleBot3 LDS height (0.18 m) with no collision geometry, so it can be
+       teleported anywhere without touching anything. Used only by scripts/world_to_map.py. -->
+  <model name="mapper_lidar">
+    <static>true</static>
+    <link name="mapper_link">
+      <visual name="visual">
+        <geometry><cylinder><radius>0.03</radius><length>0.02</length></cylinder></geometry>
+        <material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Yellow</name></script></material>
+      </visual>
+      <sensor name="mapper_lds" type="ray">
+        <always_on>true</always_on>
+        <visualize>false</visualize>
+        <update_rate>20</update_rate>
+        <ray>
+          <scan>
+            <horizontal><samples>720</samples><resolution>1</resolution><min_angle>-3.14159</min_angle><max_angle>3.14159</max_angle></horizontal>
+          </scan>
+          <range><min>0.08</min><max>12.0</max><resolution>0.01</resolution></range>
+        </ray>
+        <plugin name="mapper_laserscan" filename="libgazebo_ros_ray_sensor.so">
+          <ros><remapping>~/out:=mapper/scan</remapping></ros>
+          <output_type>sensor_msgs/LaserScan</output_type>
+          <frame_name>mapper_link</frame_name>
+        </plugin>
+      </sensor>
+    </link>
+  </model>
+</sdf>

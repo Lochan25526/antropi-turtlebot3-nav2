@@ -3,7 +3,7 @@
 
 Run against a live simulation (demo.launch.py, usually headless):
 
-    python3 scripts/nav_test.py --name run1 --out docs/results [x y yaw ...]
+    python3 scripts/nav_test.py --name run1 --out docs/results [--scene tb3_house] [x y yaw ...]
 
 Records, at 10 Hz from Gazebo ground truth (/gazebo/model_states):
   * the robot trajectory and the moving-obstacle trajectory,
@@ -34,11 +34,11 @@ from rclpy.node import Node
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from antropi_nav2_demo.nav_wait import wait_for_nav2  # noqa: E402
+from antropi_nav2_demo.scenes import load_scene  # noqa: E402
 
 ROBOT_R = 0.105
 OBST_R = 0.15      # moving_obstacle cylinder
 BOX_HALF = 0.15    # static_box half side
-DEFAULT_ROUTE = [(-2.7, -0.3, math.pi), (-4.3, 1.3, math.pi), (-1.9, 2.75, -math.pi / 2)]
 
 
 class Recorder(Node):
@@ -83,10 +83,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--name', default='run')
     ap.add_argument('--out', default='docs/results')
-    ap.add_argument('--map', default=os.path.join(os.path.dirname(__file__), '..', 'maps', 'lab_map.yaml'))
+    ap.add_argument('--scene', default='lab', help='scene whose route and map to use (config/scenes/)')
+    ap.add_argument('--map', default=None, help='map yaml for the plot (default: the scene map)')
     ap.add_argument('route', nargs='*', type=float)
     a = ap.parse_args()
-    route = DEFAULT_ROUTE if not a.route else [tuple(a.route[i:i + 3]) for i in range(0, len(a.route), 3)]
+    scene = load_scene(a.scene)
+    route = scene['route'] if not a.route else [tuple(a.route[i:i + 3]) for i in range(0, len(a.route), 3)]
+    a.map = a.map or scene['map_path']
 
     rclpy.init()
     rec = Recorder()

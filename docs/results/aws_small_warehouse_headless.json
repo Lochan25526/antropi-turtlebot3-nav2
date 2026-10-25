@@ -1,0 +1,74 @@
+{
+  "name": "aws_small_warehouse_headless",
+  "route": [
+    [
+      3.8,
+      2.2,
+      1.5708
+    ],
+    [
+      0.0,
+      0.0,
+      3.14159
+    ],
+    [
+      -1.0,
+      -4.0,
+      -1.5708
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        3.8,
+        2.2,
+        1.5708
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 39.1,
+      "recoveries": 0,
+      "replans": 37
+    },
+    {
+      "goal": [
+        0.0,
+        0.0,
+        3.14159
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 25.6,
+      "recoveries": 0,
+      "replans": 23
+    },
+    {
+      "goal": [
+        -1.0,
+        -4.0,
+        -1.5708
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 23.5,
+      "recoveries": 0,
+      "replans": 22
+    }
+  ],
+  "robot_path_length_m": 16.200508807739748,
+  "total_replans": 82,
+  "samples": 912,
+  "moving_obstacle": {
+    "min_centre_distance_m": 0.354,
+    "clearance_m": 0.099,
+    "obstacle_travel_m": 12.03,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      4.2,
+      -3.0
+    ],
+    "min_centre_distance_m": 0.557,
+    "clearance_m": 0.302,
+    "collision": false
+  },
+  "pass": true
+}

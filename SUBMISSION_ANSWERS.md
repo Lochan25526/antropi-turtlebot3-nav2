@@ -34,6 +34,15 @@ static case. A small test harness drives the route, records Gazebo ground truth,
 re-plans and recoveries and checks the closest approach to each obstacle, so every claim in
 the README comes from a logged run.
 
+To show that none of this depends on my own map, I then ran the identical stack in three
+well-known worlds: the ROBOTIS `turtlebot3_world` and `turtlebot3_house`, and the AWS
+RoboMaker small warehouse. The launch file became scene-driven (one YAML per world with the
+spawn pose, route, obstacle placement and RViz view) and nothing in the Nav2 configuration
+changed. For the maps I wrote the inverse of the first tool: a collision-free LiDAR that is
+teleported over a grid of ground-truth poses and integrates each scan, which gives a map at
+TurtleBot3 LiDAR height in under two minutes per world and avoids borrowing maps that were
+recorded with other robots.
+
 ## 2. What challenges did you encounter?
 
 The map's unknown space loaded as free. SLAM Toolbox saves the grey unknown pixels as 205
@@ -58,6 +67,19 @@ initial pose (all zeros) to `/initialpose` if it has not yet received an AMCL po
 it won that race: AMCL jumped to the map origin, every plan failed with "start position is
 off the global costmap", and I lost a while believing the launch was at fault. The scripts
 now wait on the lifecycle states and the first `/amcl_pose` without publishing anything.
+
+The three extra worlds added their own. A box placed exactly on the straight line between the
+house door and the goal made NavFn flip between passing it left and right at every replan,
+and the robot spent 60 s turning on the spot; moving the box 0.4 m to one side fixed it. A
+patrol segment that ran along the robot's lane instead of across it produced a stand-off in
+which robot and cylinder kept yielding to each other. The `turtlebot3_house` model references
+four furniture models that are not shipped with it, so Gazebo spent three minutes trying the
+retired online model database before the world appeared; I vendored the four models. The AWS
+warehouse rendered as an empty hall in the Gazebo client while the server and the LiDAR saw
+every shelf, because its visual meshes are referenced relative to the package directory and
+need `GAZEBO_RESOURCE_PATH`. And `gzclient` itself crashed on start-up twice in a row with a
+camera assertion, a known Gazebo 11 race, which the launch now works around by starting it
+late and respawning it.
 
 Smaller ones: the obstacle moved at half the commanded speed because the service call
 sometimes took longer than the 10 Hz tick and I was advancing by a fixed step, so I switched
@@ -85,6 +107,10 @@ instead of dithering, which is also what you want to watch in a demo.
 Everything in a ROS 2 system that publishes to `/initialpose` is a localisation input, tools
 included. I now treat helper libraries with the same suspicion as nodes.
 
+Running the same configuration in four worlds was the best check of all of this. Nothing in
+Nav2 had to change between a 9 m lab and a 20 m warehouse, but every scene needed its obstacle
+placement chosen with the planner's cost field in mind rather than by eye.
+
 Finally, instrumenting a test beats watching it. The ground-truth recorder told me the
 robot was 3 cm from the cylinder in one run, which no amount of staring at RViz would have
 shown, and it is why the obstacle now yields.
@@ -102,3 +128,6 @@ shown, and it is why the obstacle now yields.
   each, and a pass criterion on time, recoveries and clearance, run headless in CI.
 - Clean the map a little before generating the world, for example remove isolated specks
   under three cells, with the cleaned map used for both so they still agree.
+- Let the scene files describe several routes and obstacle layouts per world and sweep them
+  automatically, so that layout problems like the symmetric box show up as numbers rather
+  than as a slow afternoon.

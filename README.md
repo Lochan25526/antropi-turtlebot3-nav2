@@ -2,9 +2,17 @@
 
 A reproducible autonomous-navigation demo for the Antropi Robotics software intern
 assignment: a TurtleBot3 Burger drives to goals in Gazebo Classic with ROS 2 Nav2,
-avoiding furniture, an unmapped box and a moving obstacle.
+avoiding furniture, an unmapped box and a moving obstacle. The same launch file, Nav2
+configuration and test harness run in four worlds, selected with `scene:=`:
 
-The environment is not one of the stock TurtleBot3 worlds. It is the 9 x 7 m lab that my
+| Scene | World | Where it comes from |
+|---|---|---|
+| `lab` (default) | 9 x 7 m lab generated from my internship SLAM map | this repo, see below |
+| `tb3_world` | hexagon with nine pillars | ROBOTIS `turtlebot3_simulations` |
+| `tb3_house` | 15 x 10 m house with rooms and furniture | ROBOTIS `turtlebot3_simulations` |
+| `aws_small_warehouse` | 14 x 20 m warehouse with shelf aisles | `aws-robotics/aws-robomaker-small-warehouse-world` |
+
+The default environment is not a stock world. It is the 9 x 7 m lab that my
 own robot mapped during my internship ([`ros2-lidar-inertial-slam`](https://github.com/Lochan25526/ros2-lidar-inertial-slam)).
 The occupancy grid is used as-is by Nav2, and a Gazebo world is generated from it so the
 simulated LiDAR sees exactly the walls AMCL expects. The moving obstacle re-uses the motion
@@ -32,6 +40,38 @@ click before sending a goal. The default route (`send_goal` with no arguments) i
 Both obstacles are detected only through the simulated LiDAR. The planner re-plans at 1 Hz
 and the DWB controller stops and waits when the cylinder blocks its path, then continues.
 
+## The other three scenes
+
+The three well-known worlds use the stock models unchanged; only a copy of each world file
+lives here, with the `gazebo_ros_state` plugin added so the moving obstacle can be driven and
+a top-down GUI camera. Their maps were not taken from the upstream repositories (those were
+recorded with other robots at other LiDAR heights). Instead `scripts/world_to_map.py`
+spawns a collision-free LiDAR at TurtleBot3 LDS height, teleports it over a 0.5 m grid of
+poses that grows outwards from a seed, and integrates every scan at the exact pose it was
+taken from. The result is the map a perfect SLAM run would have produced, at 0.05 m, and
+it matches what the robot's own LiDAR sees by construction. The sweeps took 5 s, 47 s and
+77 s for the three worlds; `maps/<scene>_sweep.png` shows the poses visited.
+
+```bash
+ros2 launch antropi_nav2_demo demo.launch.py scene:=tb3_world
+ros2 launch antropi_nav2_demo demo.launch.py scene:=tb3_house
+ros2 launch antropi_nav2_demo demo.launch.py scene:=aws_small_warehouse
+ros2 run antropi_nav2_demo send_goal --scene tb3_house        # that scene's three-goal route
+```
+
+Each scene file in `config/scenes/` holds the spawn pose, the route, where the box and the
+patrol segment go, and the RViz view. In `tb3_world` the route circles the pillar field and the
+cylinder crosses the south ring; in `tb3_house` the robot leaves the north-west room through a
+0.95 m door with the cylinder crossing the lane in front of it; in the warehouse it drives up
+a 1.8 m shelf aisle past the box while the cylinder crosses the aisle.
+
+To regenerate a map:
+
+```bash
+ros2 launch gazebo_ros gzserver.launch.py world:=$(ros2 pkg prefix antropi_nav2_demo)/share/antropi_nav2_demo/worlds/tb3_house.world
+python3 scripts/world_to_map.py --seed -3 1 --bounds -8 -6 8 6 --out maps/tb3_house
+```
+
 ## Tested with
 
 | Component | Version |
@@ -56,12 +96,17 @@ sudo apt install ros-humble-desktop ros-humble-gazebo-ros-pkgs \
 
 mkdir -p ~/antropi_nav2_ws/src && cd ~/antropi_nav2_ws/src
 git clone https://github.com/Lochan25526/antropi-turtlebot3-nav2.git antropi_nav2_demo
+# only needed for scene:=aws_small_warehouse (24 MB of models, MIT-0):
+git clone -b ros2 https://github.com/aws-robotics/aws-robomaker-small-warehouse-world.git
 cd ~/antropi_nav2_ws
 source /opt/ros/humble/setup.bash
 rosdep install --from-paths src -y --ignore-src   # optional, the apt line above covers it
 colcon build --symlink-install
 source install/setup.bash
 ```
+
+`deps.repos` lists the same AWS repository for `vcs import`. The other three scenes need
+nothing beyond the apt packages.
 
 `TURTLEBOT3_MODEL` does not need to be set; the launch file reads the model name from its
 own `model` argument (default `burger`).
@@ -92,15 +137,19 @@ Useful launch arguments (`ros2 launch antropi_nav2_demo demo.launch.py --show-ar
 
 | Argument | Default | Meaning |
 |---|---|---|
+| `scene` | `lab` | `lab`, `tb3_world`, `tb3_house` or `aws_small_warehouse`; sets the defaults of everything below |
 | `gui` / `rviz` | `true` | set either to `false` for a headless run |
 | `obstacle` | `true` | spawn and drive the moving cylinder |
 | `obstacle_mode` | `patrol` | `patrol` walks between two points; `crossing` is the original internship behaviour (see below) |
 | `obstacle_speed` | `0.15` | m/s |
-| `patrol` | `-2.7,1.9,-1.7,1.9` | patrol segment `x0,y0,x1,y1` in the map frame |
+| `patrol` | from the scene | patrol segment `x0,y0,x1,y1` in the map frame |
 | `static_obstacle` | `true` | spawn the unmapped red box |
-| `static_x`, `static_y` | `-2.0`, `0.4` | where the box goes |
-| `x_pose`, `y_pose`, `yaw` | `-1.9`, `2.75`, `-1.5708` | spawn pose; AMCL's `initial_pose` in `config/nav2_params.yaml` must match |
-| `map`, `world`, `params_file` | package files | swap in your own |
+| `static_x`, `static_y` | from the scene | where the box goes |
+| `x_pose`, `y_pose`, `yaw` | from the scene | spawn pose; AMCL is seeded with the same numbers automatically |
+| `map`, `world`, `params_file` | from the scene | swap in your own |
+
+The launch writes a copy of the Nav2 parameters and of the RViz config with the scene's
+values filled in to a fresh `/tmp/antropi_nav2_<scene>_*/` directory each run.
 
 To stop, Ctrl-C the launch terminal. Nav2 runs without composition here, so shutdown takes
 about two seconds and leaves nothing behind.
@@ -159,6 +208,24 @@ approach in the restart run happened before the yield rule was added to the obst
 after it the obstacle pauses whenever the robot is within 0.4 m, so a waiting robot can no
 longer be run over by a kinematically moved model.
 
+The same route harness in the other three scenes (default settings, patrol cylinder and box
+in every run):
+
+| Scene | Run | Leg times (s) | Recoveries | Path | Closest to cylinder | Closest to box | Result |
+|---|---|---|---|---|---|---|---|
+| `tb3_world` | headless | 12.9 / 19.3 / 18.0 | 0 | 9.0 m | 0.35 m | 0.69 m | 3/3 reached |
+| `tb3_world` | recorded | 18.9 / 20.7 / 14.4 | 0 | 8.9 m | 0.32 m | 0.76 m | 3/3 reached |
+| `tb3_house` | headless | 32.5 / 40.9 / 19.8 | 0 | 17.3 m | 0.44 m | 0.49 m | 3/3 reached |
+| `tb3_house` | recorded | 41.8 / 41.8 / 19.9 | 0 | 17.8 m | 0.55 m | 0.49 m | 3/3 reached |
+| `aws_small_warehouse` | headless | 39.1 / 25.6 / 23.5 | 0 | 16.2 m | 0.35 m | 0.56 m | 3/3 reached |
+| `aws_small_warehouse` | recorded | 46.9 / 26.0 / 23.5 | 1 | 16.1 m | 0.41 m | 0.52 m | 3/3 reached |
+
+Two earlier layouts of these scenes were rejected and are worth knowing about. With the box
+placed exactly on the straight line between the house door and the goal, NavFn flipped between
+passing it left and right on every 1 Hz replan and the robot needed six recoveries; moving the
+box 0.4 m to one side removed the problem. With the house patrol segment running along the
+robot's own lane instead of across it, robot and cylinder kept yielding to each other.
+
 Verified by hand on top of the harness: all Nav2 lifecycle nodes activate, `/scan` at 5 Hz,
 `/odom` at 30 Hz, `/clock` from Gazebo, the full TF chain, `/map` loads with 5141 occupied
 and 29708 unknown cells, both costmaps publish, and the system restarts cleanly after Ctrl-C.
@@ -168,8 +235,10 @@ Not verified: behaviour with the `waffle` models (the launch argument exists but
 
 ## Recording the demo
 
-`docs/media/demo_recording.mp4` was made with `ffmpeg` grabbing the screen while
-`send_goal` drove the default route, with RViz and Gazebo side by side. To reproduce:
+All four recordings in `docs/media/` were made with `ffmpeg` grabbing the screen while the
+harness drove the scene's route, RViz on the left and Gazebo on the right:
+`demo_recording.mp4` (lab, 82 s), `tb3_world_demo.mp4` (69 s), `tb3_house_demo.mp4` (118 s)
+and `aws_small_warehouse_demo.mp4` (113 s). To reproduce one:
 
 ```bash
 ros2 launch antropi_nav2_demo demo.launch.py          # terminal 1, arrange the two windows
@@ -192,6 +261,14 @@ Stop `ffmpeg` with `q` once the robot is back at the start. The route takes 65 t
 - The first goal sometimes needs one recovery (spin or back-up) when the cylinder parks in the
   robot's path for longer than the 10 s progress-checker window.
 - NavFn is not allowed to plan through unknown space. Goals outside the mapped area will be rejected.
+- `gzclient` sometimes aborts on start-up with a `boost::shared_ptr<Camera>` assertion, a
+  Gazebo 11 race with the server. The launch starts it 5 s after the server and respawns it
+  if it dies; in testing the second start always came up.
+- The stock `turtlebot3_house` model has no south wall between x = -7.5 and x = 4.8, so its
+  map is bounded by the sweep limits there rather than by geometry.
+- The warehouse scene needs `GAZEBO_RESOURCE_PATH` to contain the AWS package share directory
+  (the launch sets it). Without it the server runs fine but the client draws an empty hall,
+  because the visual meshes are referenced relative to that directory.
 
 ## Layout
 
@@ -199,16 +276,20 @@ Stop `ffmpeg` with `q` once the robot is back at the start. The route takes 65 t
 antropi_nav2_demo/            ROS 2 package root (this repo)
   antropi_nav2_demo/
     dynamic_obstacle.py       moves the cylinder through /gazebo/set_entity_state
-    send_goal.py              sends the route through nav2_simple_commander
+    send_goal.py              sends a scene's route through nav2_simple_commander
     nav_wait.py               waits for Nav2 without publishing an initial pose
-  launch/demo.launch.py       the single entry point
+    scenes.py                 loads config/scenes/<scene>.yaml
+  launch/demo.launch.py       the single entry point, scene:=lab|tb3_world|tb3_house|aws_small_warehouse
   config/nav2_params.yaml     Nav2 parameters, every change from stock marked
-  maps/lab_map.{pgm,yaml}     the internship map
-  worlds/lab.world            generated Gazebo world
-  models/                     moving_obstacle, static_box
+  config/scenes/              spawn pose, route, obstacle placement and RViz view per scene
+  maps/                       lab_map (internship SLAM map) and the three swept maps
+  worlds/                     lab.world (generated) and the three copied world files
+  models/                     moving_obstacle, static_box, mapper_lidar, four OSRF models
   rviz/nav2_demo.rviz
-  scripts/map_to_world.py     map -> world generator
+  scripts/map_to_world.py     map -> world generator (lab)
+  scripts/world_to_map.py     world -> map generator (ground-truth LiDAR sweep)
   scripts/nav_test.py         instrumented test runner
+  deps.repos                  the AWS warehouse package, for vcs import
   docs/results/               JSON + plots from the runs in the table above
   docs/media/                 the screen recording and stills from it
   SUBMISSION_ANSWERS.md       answers to the application questions
@@ -216,6 +297,7 @@ antropi_nav2_demo/            ROS 2 package root (this repo)
 
 ## Licence
 
-Apache-2.0, see `LICENSE`. The map is MIT-licensed from my own repository; the Nav2
-parameter file and RViz configuration are derived from Apache-2.0 files by ROBOTIS and the
-Nav2 maintainers.
+Apache-2.0, see `LICENSE`. The lab map is MIT-licensed from my own repository; the Nav2
+parameter file, the RViz configuration and the two TurtleBot3 world files are derived from
+Apache-2.0 files by ROBOTIS and the Nav2 maintainers; the four furniture models are
+Apache-2.0 from `osrf/gazebo_models`; the warehouse world file is MIT-0 from AWS.
