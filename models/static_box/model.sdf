@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <!-- 0.3 x 0.3 x 0.5 m box that is NOT in the map. The robot only learns about it
+       from the LiDAR, so it exercises the costmap obstacle layers and replanning. -->
+  <model name="static_box">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <pose>0 0 0.25 0 0 0</pose>
+        <geometry><box><size>0.3 0.3 0.5</size></box></geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0 0 0.25 0 0 0</pose>
+        <geometry><box><size>0.3 0.3 0.5</size></box></geometry>
+        <material>
+          <script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Red</name></script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

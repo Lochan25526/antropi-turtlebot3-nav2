@@ -1,0 +1,74 @@
+{
+  "name": "headless_patrol_box_restart",
+  "route": [
+    [
+      -2.7,
+      -0.3,
+      3.141592653589793
+    ],
+    [
+      -4.3,
+      1.3,
+      3.141592653589793
+    ],
+    [
+      -1.9,
+      2.75,
+      -1.5707963267948966
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        -2.7,
+        -0.3,
+        3.141592653589793
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 30.4,
+      "recoveries": 1,
+      "replans": 30
+    },
+    {
+      "goal": [
+        -4.3,
+        1.3,
+        3.141592653589793
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 19.3,
+      "recoveries": 0,
+      "replans": 18
+    },
+    {
+      "goal": [
+        -1.9,
+        2.75,
+        -1.5707963267948966
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 22.8,
+      "recoveries": 0,
+      "replans": 21
+    }
+  ],
+  "robot_path_length_m": 9.793536542948786,
+  "total_replans": 69,
+  "samples": 761,
+  "moving_obstacle": {
+    "min_centre_distance_m": 0.285,
+    "clearance_m": 0.03,
+    "obstacle_travel_m": 9.87,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      -2.0,
+      0.4
+    ],
+    "min_centre_distance_m": 0.372,
+    "clearance_m": 0.117,
+    "collision": false
+  },
+  "pass": true
+}

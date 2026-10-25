@@ -1,0 +1,16 @@
+# colcon output (build from the workspace root, never inside the package)
+build/
+install/
+log/
+# python
+__pycache__/
+*.pyc
+*.egg-info/
+# ros / gazebo runtime leftovers
+*.bag
+*.db3
+.ros/
+# editors
+.vscode/
+.idea/
+*~

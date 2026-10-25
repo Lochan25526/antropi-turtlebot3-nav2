@@ -1,0 +1,74 @@
+{
+  "name": "layout2_stock_inflation_detour",
+  "route": [
+    [
+      -2.7,
+      -0.3,
+      3.141592653589793
+    ],
+    [
+      -4.3,
+      1.3,
+      3.141592653589793
+    ],
+    [
+      -1.9,
+      2.75,
+      -1.5707963267948966
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        -2.7,
+        -0.3,
+        3.141592653589793
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 43.0,
+      "recoveries": 1,
+      "replans": 36
+    },
+    {
+      "goal": [
+        -4.3,
+        1.3,
+        3.141592653589793
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 18.7,
+      "recoveries": 0,
+      "replans": 18
+    },
+    {
+      "goal": [
+        -1.9,
+        2.75,
+        -1.5707963267948966
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 20.5,
+      "recoveries": 0,
+      "replans": 20
+    }
+  ],
+  "robot_path_length_m": 11.713583431164931,
+  "total_replans": 74,
+  "samples": 853,
+  "moving_obstacle": {
+    "min_centre_distance_m": 0.705,
+    "clearance_m": 0.45,
+    "obstacle_travel_m": 11.0,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      -2.0,
+      0.4
+    ],
+    "min_centre_distance_m": 0.918,
+    "clearance_m": 0.663,
+    "collision": false
+  },
+  "pass": true
+}

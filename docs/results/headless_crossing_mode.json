@@ -1,0 +1,74 @@
+{
+  "name": "headless_crossing_mode",
+  "route": [
+    [
+      -2.7,
+      -0.3,
+      3.141592653589793
+    ],
+    [
+      -4.3,
+      1.3,
+      3.141592653589793
+    ],
+    [
+      -1.9,
+      2.75,
+      -1.5707963267948966
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        -2.7,
+        -0.3,
+        3.141592653589793
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 117.6,
+      "recoveries": 9,
+      "replans": 97
+    },
+    {
+      "goal": [
+        -4.3,
+        1.3,
+        3.141592653589793
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 18.4,
+      "recoveries": 0,
+      "replans": 17
+    },
+    {
+      "goal": [
+        -1.9,
+        2.75,
+        -1.5707963267948966
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 22.6,
+      "recoveries": 0,
+      "replans": 20
+    }
+  ],
+  "robot_path_length_m": 9.473825753902828,
+  "total_replans": 134,
+  "samples": 1625,
+  "moving_obstacle": {
+    "min_centre_distance_m": 0.583,
+    "clearance_m": 0.328,
+    "obstacle_travel_m": 45.26,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      -2.0,
+      0.4
+    ],
+    "min_centre_distance_m": 0.399,
+    "clearance_m": 0.144,
+    "collision": false
+  },
+  "pass": true
+}

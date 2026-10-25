@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <!-- Moving obstacle for the Nav2 demo. The model is static so physics never
+       pushes it over; the dynamic_obstacle node repositions it every tick with
+       /gazebo/set_entity_state. 0.5 m tall so the TurtleBot3 LDS (0.17 m) sees it. -->
+  <model name="moving_obstacle">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <pose>0 0 0.25 0 0 0</pose>
+        <geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0 0 0.25 0 0 0</pose>
+        <geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry>
+        <material>
+          <script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Orange</name></script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

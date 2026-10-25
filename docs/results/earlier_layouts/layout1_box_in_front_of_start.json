@@ -1,0 +1,74 @@
+{
+  "name": "layout1_box_in_front_of_start",
+  "route": [
+    [
+      -4.3,
+      1.3,
+      3.141592653589793
+    ],
+    [
+      -2.3,
+      -0.1,
+      -1.5707963267948966
+    ],
+    [
+      -1.9,
+      2.0,
+      3.141592653589793
+    ]
+  ],
+  "goals": [
+    {
+      "goal": [
+        -4.3,
+        1.3,
+        3.141592653589793
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 130.8,
+      "recoveries": 9,
+      "replans": 113
+    },
+    {
+      "goal": [
+        -2.3,
+        -0.1,
+        -1.5707963267948966
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 22.9,
+      "recoveries": 0,
+      "replans": 21
+    },
+    {
+      "goal": [
+        -1.9,
+        2.0,
+        3.141592653589793
+      ],
+      "result": "SUCCEEDED",
+      "time_s": 17.5,
+      "recoveries": 0,
+      "replans": 16
+    }
+  ],
+  "robot_path_length_m": 11.765684905382098,
+  "total_replans": 150,
+  "samples": 1750,
+  "moving_obstacle": {
+    "min_centre_distance_m": 1.21,
+    "clearance_m": 0.955,
+    "obstacle_travel_m": 29.26,
+    "collision": false
+  },
+  "static_box": {
+    "pose": [
+      -2.6,
+      2.0
+    ],
+    "min_centre_distance_m": 0.697,
+    "clearance_m": 0.442,
+    "collision": false
+  },
+  "pass": true
+}
